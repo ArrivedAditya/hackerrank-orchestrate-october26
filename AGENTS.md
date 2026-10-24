@@ -20,6 +20,25 @@ On every session start, do this in order:
 
 Do not skip logging or rewrite old log entries. Sub-agents and worktrees use the same log file.
 
+### 0.1 Repo Snapshot
+
+- This checkout is the untouched starter: `code/main.py` is empty and `code/evaluation/` is empty. There is no build system, test suite, linter, manifest, lockfile, CI workflow, or `opencode.json` to discover. Do not hunt for one; add whatever you need and document the run command in `README.md`.
+- Verified dataset scale: 518 requests in `dataset/deletion_requests.csv`, 32 answered samples in `dataset/sample_output.csv`, 94 files listed in `dataset/evidence_files.csv`, and 4,012 rows in `dataset/system_activity.csv`.
+- The graded artifact is `output.csv` at the **repository root**. `dataset/output.csv` is a header-only template, not the deliverable.
+- Write the evaluation reports as **Markdown in `code/evaluation/`** (that directory already exists). The automated judge ignores raw `.csv/.tsv/.json/.jsonl/.sql/.log` files, so metrics stored only in data files are invisible. `README.md`'s packaging command zips `README.md` + `code`, so a root-level `evaluation/` would be dropped from `code.zip`.
+- Resolve dataset and output paths from the repository root, and write logs in UTF-8 with `\n` line endings.
+
+### 0.2 Gotchas That Cost Points
+
+- `reported_status` is a claim, never the answer. The dataset splits into 254 `COMPLETE`, 152 `PARTIALLY_COMPLETE`, and 112 `NOT_STARTED`, and none of those counts predicts the true state.
+- `dataset/sample_output.csv` contains only `COMPLETE` (10) and `INCOMPLETE` (22) rows, with **zero `NOT_APPLICABLE` examples**. Non-deletion requests (access, correction, export, marketing opt-out, login help, copy-of-data asks) appear only in the evaluation set, so implement that branch from the spec text, not by copying samples.
+- 62 requests are non-English (Portuguese, Korean, Spanish, Japanese, French). Judge intent, not English keywords.
+- `audit_at` spans 2026-01-29 to 2026-10-01, and evidence `captured_at` values reach the same 2026-10-01 date. Evidence captured after a case's `audit_at` is a decoy for that case.
+- `dataset/evidence_files.csv` carries no case or user column. Link evidence through current and historical identifiers (`user_identities.csv` plus `user_audit_log.csv`), `email_hash`, `resource_id`, and timestamps, then read the file content.
+- `.sql` evidence is SQLite-readable text: one table per data category plus a `snapshot_scope` row naming the origin and capture time. Replicas drift from the primary, so compare tables across snapshots instead of trusting a single file.
+- Step ordering is exact: phase (`FINDING` → `REMEDIATION` → `VERIFICATION`), then the §6.4 operation order, then `system_id`, then `resource_id`.
+- `log.txt` does not exist until the first entry. Keep it at the repository root, never bundle it into `code.zip`, and upload it as the `chat_transcript`.
+
 ---
 
 ## 1. What This Repo Is
@@ -331,11 +350,11 @@ Do not invent additional phases, operations, or states.
 The submitted `code.zip` must include:
 
 ```text
-evaluation/evaluation_report.md
-evaluation/usage_report.md
+code/evaluation/evaluation_report.md
+code/evaluation/usage_report.md
 ```
 
-`evaluation/evaluation_report.md` must contain:
+`code/evaluation/evaluation_report.md` must contain:
 
 - case-level deletion-status accuracy;
 - step-level and field-level accuracy;
@@ -343,7 +362,7 @@ evaluation/usage_report.md
 - at least three additional evaluation cases created by the participant; and
 - failures found and improvements made.
 
-`evaluation/usage_report.md` must summarize the final full-dataset run that produced `output.csv`, including:
+`code/evaluation/usage_report.md` must summarize the final full-dataset run that produced `output.csv`, including:
 
 - model providers and model names;
 - model-call counts;
