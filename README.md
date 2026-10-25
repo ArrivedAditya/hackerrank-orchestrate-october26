@@ -40,6 +40,92 @@ python3 code/main.py
 The blank template at `dataset/output.csv` is provided as a reference. Your final generated file for submission must be the root-level `output.csv`.
 
 
+## Submitted Solution
+
+This repository contains a complete, working solution: a deterministic
+evidence-audit engine written in Python 3 using **only the standard library**.
+
+### Requirements
+
+- Python 3.8 or newer
+- No third-party packages, no network access, no API keys, no model calls
+
+### Run
+
+From the repository root:
+
+```bash
+python3 code/main.py
+```
+
+This reads `dataset/deletion_requests.csv` and writes `output.csv` (518 rows) to
+the repository root. Two other entry points are useful for review:
+
+```bash
+python3 code/main.py --sample        # 32 public samples -> code/sample_predictions.csv
+python3 code/evaluation/metrics.py dataset/sample_output.csv code/sample_predictions.csv
+python3 code/evaluation/run_custom_cases.py   # 4 participant-created cases
+```
+
+`--dataset DIR`, `--input FILE` and `--output FILE` override the defaults, so the
+same code can be pointed at another copy of the corpus.
+
+### Layout
+
+| Path | Role |
+| --- | --- |
+| `code/main.py` | CLI entry point; writes `output.csv` |
+| `code/ir.py` | Parses all 94 artifacts (SQL snapshots, JSON bundles, five log dialects, plain-text state table, transcribed binary facts) into `Fact` records and `Snapshot` captures |
+| `code/identity.py` | Current and historical identifier index (email, phone, email hash, stable `user_id`); token-exact matching |
+| `code/policy.py` | The supplied rule table and the operation/phase ordering |
+| `code/plan.py` | Reconstructs record state at `audit_at`, applies policy, emits findings, remediation and verification in the required order |
+| `code/fixtures/binary_facts.json` | Facts transcribed once, offline, from 11 screenshots and 4 PDFs, with the capture time of each file |
+| `code/validate.py` | Sample comparison helper |
+| `code/evaluation/` | Evaluation and usage reports, the metrics script, and the custom-case runner |
+
+### How a case is decided
+
+1. **Intent.** The request text is classified first. Explicit refusals
+   ("not asking for deletion", "não peço exclusão", "ne rien supprimer") and
+   competing privacy actions (access, copy, correction, opt-out, login help) make
+   the case `NOT_APPLICABLE` with `steps_json=[]`.
+2. **Subject.** Current and historical identifiers are resolved from
+   `user_identities.csv` and `user_audit_log.csv`, so an old email address in an
+   artifact still links to the person.
+3. **State at `audit_at`.** Evidence facts carry two times: `observed_at` (when
+   the event happened) decides the state, `captured_at` (when the file became
+   available) decides whether the file may be cited. Anything captured after
+   `audit_at` is never used as proof. Workflow statuses, `reported_result` values
+   and activity claims are treated as claims; content wins.
+4. **Policy.** Each record is mapped to its category and given the action from
+   `deletion_rules.csv`: delete, redact, anonymise, retain, or keep a tombstone
+   with only the stable `user_id`. Account tombstones are judged by what they
+   still contain.
+5. **Steps.** Findings cite the strongest artifact available at the cutoff.
+   Remediation stops data flows and blocks unsafe restores before dependent
+   copies are changed, and every remediated record gets a post-remediation
+   verification. For `INCOMPLETE` cases those future steps use `evidence_id=""`.
+   Steps are ordered by phase, then by the operation order in the problem
+   statement, then by `system_id` and `resource_id`, and numbered from 1.
+
+### Validation
+
+- Public samples: 32/32 correct `deletion_status`, step F1 0.9309, field accuracy
+  0.9045, exact sequence on 21/32 cases.
+- Four additional cases (French copy request, Portuguese opt-out, live flow with
+  restorable backup, already-complete deletion) pass in
+  `code/evaluation/run_custom_cases.py`.
+- Full run: 518/518 rows, valid JSON in every row, consecutive step numbers,
+  phases in order, `NOT_APPLICABLE` rows empty, `COMPLETE` verification always
+  cites evidence.
+
+Details, including the failures found while building the engine and the residual
+information that is not present in the participant data, are in
+[`code/evaluation/evaluation_report.md`](./code/evaluation/evaluation_report.md);
+compute and token usage are in
+[`code/evaluation/usage_report.md`](./code/evaluation/usage_report.md).
+
+
 ## Dataset
 
 All participant-facing files are in `dataset/`:

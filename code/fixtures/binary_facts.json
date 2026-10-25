@@ -1,0 +1,318 @@
+{
+  "_comment": "Facts extracted once from the 11 PNG screenshots and 4 PDF documents under dataset/evidence/. Screenshots and PDFs have no machine-readable text layer that names resources consistently, so their content is transcribed here as a reviewable fixture. Each entry is a claim about one resource at the manifest capture time; the loader in code/ir.py turns these into the same Fact objects as the text artifacts. Extract with: python3 code/extract_binary.py --check",
+  "evidence_04": [
+    {
+      "resource_id": "account_5762",
+      "system": "account_service",
+      "category": "USER_PROFILE",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_11",
+        "name": "Haruka Sato",
+        "email": "haruka.s1838@zoho.com"
+      },
+      "attrs": {
+        "account_status": "ACTIVE",
+        "screen": "Account Admin console",
+        "note": "profile visible with name and email"
+      }
+    }
+  ],
+  "evidence_09": [
+    {
+      "resource_id": "search_428",
+      "system": "search_service",
+      "category": "SEARCH_INDEX_ENTRY",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_13",
+        "name": "Gabriel Silva",
+        "email": "g.silva76@gmail.com"
+      },
+      "attrs": {
+        "index": "customer_directory_v3",
+        "score": "9.84",
+        "note": "second hit search_1874 is a different person (g.silva76.jr@gmail.com, no customer reference)"
+      }
+    }
+  ],
+  "evidence_14": [
+    {
+      "resource_id": "data_flow_1121",
+      "system": "integration_service",
+      "category": "DATA_FLOW",
+      "state": "ACTIVE",
+      "pii": true,
+      "subject": {
+        "email": "jain.aditi@gmail.com"
+      },
+      "attrs": {
+        "connector_name": "data_flow_1121",
+        "destination": "customer_analytics_warehouse",
+        "mode": "Continuous",
+        "last_contact": "07:59:42"
+      }
+    },
+    {
+      "resource_id": "data_flow_9846",
+      "system": "integration_service",
+      "category": "DATA_FLOW",
+      "state": "ACTIVE",
+      "pii": true,
+      "subject": {
+        "email": "lucia-torres@gmail.com"
+      },
+      "attrs": {
+        "connector_name": "data_flow_9846",
+        "destination": "customer_analytics_warehouse",
+        "mode": "Continuous",
+        "last_contact": "07:59:36"
+      }
+    }
+  ],
+  "evidence_18": [
+    {
+      "resource_id": "export_1842",
+      "system": "export_service",
+      "category": "USER_EXPORT",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_18",
+        "name": "Ingrid Dahl",
+        "email": "ingrid.dahl@outlook.com"
+      },
+      "attrs": {
+        "statement": "NST-2026-0718-1842",
+        "order": "ORD-20261260",
+        "delivery_address": "24 Fjordgata, 7010 Trondheim, Norway"
+      }
+    }
+  ],
+  "evidence_19": [
+    {
+      "resource_id": "analytics_7438",
+      "system": "analytics_platform",
+      "category": "ANALYTICS_PROFILE",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_20",
+        "name": "Omar Darwish",
+        "email": "darwish.omar@icloud.com"
+      },
+      "attrs": {
+        "sessions": "12",
+        "orders": "2",
+        "revenue_usd": "167.42",
+        "market": "AE"
+      }
+    }
+  ],
+  "evidence_23": [
+    {
+      "resource_id": "export_1260",
+      "system": "export_service",
+      "category": "USER_EXPORT",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_18",
+        "name": "Ingrid Dahl",
+        "email": "ingrid.dahl@outlook.com"
+      },
+      "attrs": {
+        "filename": "customer_export_1260.zip",
+        "status": "Ready",
+        "created": "2026-06-18T06:42:00Z",
+        "size_mb": "18.4"
+      }
+    }
+  ],
+  "evidence_27": [
+    {
+      "resource_id": "legal_hold_4118",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_08"
+      },
+      "attrs": {
+        "order": "ORD-20264118",
+        "reason": "Card dispute",
+        "retained_until": "2033-05-04T00:00:00Z"
+      }
+    },
+    {
+      "resource_id": "legal_hold_4207",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_12"
+      },
+      "attrs": {
+        "order": "ORD-20264207",
+        "reason": "Tax correction",
+        "retained_until": "2033-05-09T00:00:00Z"
+      }
+    },
+    {
+      "resource_id": "legal_hold_4319",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_17"
+      },
+      "attrs": {
+        "order": "ORD-20264319",
+        "reason": "Chargeback",
+        "retained_until": "2033-05-14T00:00:00Z"
+      }
+    },
+    {
+      "resource_id": "legal_hold_4402",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_21"
+      },
+      "attrs": {
+        "order": "ORD-20264402",
+        "reason": "Invoice inquiry",
+        "retained_until": "2033-05-18T00:00:00Z"
+      }
+    },
+    {
+      "resource_id": "legal_hold_4511",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_24"
+      },
+      "attrs": {
+        "order": "ORD-20264511",
+        "reason": "Card dispute",
+        "retained_until": "2033-05-23T00:00:00Z"
+      }
+    },
+    {
+      "resource_id": "legal_hold_4600",
+      "system": "legal_service",
+      "category": "LEGAL_HOLD_RECORD",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_29"
+      },
+      "attrs": {
+        "order": "ORD-20264600",
+        "reason": "Tax record",
+        "retained_until": "2033-05-28T00:00:00Z"
+      }
+    }
+  ],
+  "evidence_28": [
+    {
+      "resource_id": "support_1034",
+      "system": "support_platform",
+      "category": "SUPPORT_MESSAGE",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_22",
+        "name": "Kofi Agyeman",
+        "email": "kagyeman8947@fastmail.com"
+      },
+      "attrs": {
+        "ticket": "CS-5034",
+        "agent": "Maya Chen",
+        "order": "ORD-20265034",
+        "shared_context": "agent and order retained for dispute handling"
+      }
+    }
+  ],
+  "evidence_32": [
+    {
+      "resource_id": "backup_9287",
+      "system": "backup_service",
+      "category": "BACKUP_ARCHIVE",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "email": "areed1433@gmail.com"
+      },
+      "attrs": {
+        "archive_key": "archive/customer-data/backup_9287.tar.zst",
+        "restore_allowed": true,
+        "note": "restore console still offers restore for this archive"
+      }
+    }
+  ],
+  "evidence_37": [
+    {
+      "resource_id": "audit_record_003",
+      "system": "security_service",
+      "category": "SECURITY_AUDIT_LOG",
+      "state": "PRESENT",
+      "pii": false,
+      "subject": {
+        "user_id": "user_03"
+      },
+      "attrs": {
+        "event": "account_closed",
+        "retention": "retained_until 2027-08-25",
+        "note": "the account events console lists six events for user_03; only audit_record_003 is linked to the case by the data catalog (activity_4010) and by the retention extract, so the other five are context"
+      }
+    }
+  ],
+  "evidence_55": [
+    {
+      "resource_id": "audit_record_003",
+      "system": "security_service",
+      "category": "SECURITY_AUDIT_LOG",
+      "state": "PRESENT",
+      "pii": false,
+      "subject": {
+        "user_id": "user_03"
+      },
+      "attrs": {
+        "event": "Account closure recorded",
+        "retained_until": "2027-08-25T04:03:00Z",
+        "reference": "CJX-20260905-0630"
+      }
+    }
+  ],
+  "evidence_58": [
+    {
+      "resource_id": "support_001",
+      "system": "support_platform",
+      "category": "SUPPORT_ATTACHMENT",
+      "state": "PRESENT",
+      "pii": true,
+      "subject": {
+        "user_id": "user_07",
+        "name": "Priya Raman",
+        "email": "priya.raman@gmail.com",
+        "phone": "+91 98765 73142"
+      },
+      "attrs": {
+        "reference": "CS-4827",
+        "order": "ORD-20264827",
+        "received": "2026-06-18T10:24:00Z",
+        "attachment": "delivery address correction"
+      }
+    }
+  ]
+}
